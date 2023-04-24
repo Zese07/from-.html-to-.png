@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GitHub API Example</title>
+</head>
+<body>
+  <h1>GitHub API Example</h1>
+  <button onclick="fetchRepoContents()">Fetch Repository Contents</button>
+
+  <script>
+    function fetchRepoContents() {
+      var repoOwner = 'one';
+      var repoName = 'two';
+      var folderPath = 'three';
+
+      // Construct the GitHub API URL to fetch the repository contents
+      var apiUrl = 'https://api.github.com/repos/' + repoOwner + '/' + repoName + '/contents/' + folderPath + '?ref=main';
+
+      // Send a GET request to the GitHub API
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            redirectToUrl(response[0].html_url); // Redirect to the URL of the first file
+          } else {
+            console.error('Failed to fetch repository contents. Status code: ' + xhr.status);
+          }
+        }
+      };
+      xhr.open('GET', apiUrl);
+      xhr.send();
+    }
+
+    function redirectToUrl(url) {
+      window.location.href = url; // Redirect to the URL obtained from the GitHub API
+    }
+  </script>
+</body>
+</html>
